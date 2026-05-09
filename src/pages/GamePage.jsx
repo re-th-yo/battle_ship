@@ -281,9 +281,7 @@ export default function GamePage() {
 
   const { phase, round, turn, uiMode, player, bot, winner, lastShot } = state
   // In multiplayer, derive round from total shots so both players stay in sync
-  const displayRound = isMultiplayer
-    ? Object.keys(player.shots).length + Object.keys(bot.shots).length + 1
-    : round
+  const displayRound = round
   // lastAbility handled via useEffect → abilityNotif local state
   const isPlayerTurn = phase === 'playing' && turn === 'player'
   const isAttack = uiMode === 'attack'
