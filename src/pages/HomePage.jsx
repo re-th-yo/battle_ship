@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { ROUTES } from '../lib/constants.js'
 import { useGameContext } from '../store/GameContext.jsx'
 import { createRoom, joinRoom } from '../lib/roomService.js'
@@ -48,7 +48,7 @@ function FlechesSide({ left, right }) {
   )
 }
 
-// Yellow lines — full-page, behind content, proportional to viewport
+// Yellow lines — fixed 900×900px, centered, same size regardless of window
 function YellowLines() {
   return (
     <img
@@ -56,10 +56,9 @@ function YellowLines() {
       alt=""
       style={{
         position: 'absolute',
-        inset: 0,
-        width: '100%',
-        height: '100%',
-        objectFit: 'cover',
+        top: '50%', left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 900, height: 900,
         opacity: 0.5,
         pointerEvents: 'none',
         userSelect: 'none',
@@ -69,23 +68,38 @@ function YellowLines() {
   )
 }
 
-// Logo using Scyborg font
+// Logo — title auto-sized to match subtitle width via JS measurement
 function Logo() {
+  const titleRef   = useRef(null)
+  const subtitleRef = useRef(null)
+
+  useEffect(() => {
+    const title    = titleRef.current
+    const subtitle = subtitleRef.current
+    if (!title || !subtitle) return
+    const subW  = subtitle.getBoundingClientRect().width
+    const titW  = title.getBoundingClientRect().width
+    const curFS = parseFloat(window.getComputedStyle(title).fontSize)
+    title.style.fontSize = (curFS * subW / titW) + 'px'
+    title.style.opacity  = '1'
+  }, [])
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
-      <div style={{
+      <div ref={titleRef} style={{
         fontFamily: "'Scyborg', 'JetBrains Mono', monospace",
-        fontSize: 11,
+        fontSize: 64,
         fontWeight: 400,
         color: '#C5FF00',
         letterSpacing: '0.04em',
         lineHeight: 1,
         userSelect: 'none',
         whiteSpace: 'nowrap',
+        opacity: 0,
       }}>
         battle.shxp
       </div>
-      <p style={{
+      <p ref={subtitleRef} style={{
         fontFamily: "'JetBrains Mono', monospace",
         fontSize: 11,
         color: '#C5FF00',
