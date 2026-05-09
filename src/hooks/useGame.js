@@ -25,7 +25,7 @@ export function makeInitialState(difficulty = 'easy') {
     lastAbility: null, // { by:'player'|'bot', ability:'rdr'|'gltch'|'msl' } for notification
 
     player: {
-      credits: 0,
+      credits: 2,
       units: createPlayerUnits(),
       shots: {},
       skipTurns: 0,
@@ -36,7 +36,7 @@ export function makeInitialState(difficulty = 'easy') {
 
     bot: {
       difficulty,
-      credits: 0,
+      credits: 2,
       units: {},
       shots: {},
       skipTurns: 0,
