@@ -137,7 +137,6 @@ function reducer(state, action) {
           bot: { ...state.bot, shots: newBotShots },
         }
       }
-      const newRound = shot.result !== 'hit'
       return {
         ...state,
         round: state.round + 1,
@@ -146,12 +145,12 @@ function reducer(state, action) {
         player: {
           ...state.player,
           units: newPlayerUnits,
-          credits: newRound ? capCredits(state.player.credits + ECONOMY.creditPerRound) : state.player.credits,
+          credits: capCredits(state.player.credits + ECONOMY.creditPerRound),
         },
         bot: {
           ...state.bot,
           shots: newBotShots,
-          credits: newRound ? capCredits(state.bot.credits + ECONOMY.creditPerRound) : state.bot.credits,
+          credits: capCredits(state.bot.credits + ECONOMY.creditPerRound),
         },
       }
     }
@@ -222,8 +221,6 @@ function reducer(state, action) {
       const newGens  = destroyedGenCount(newPlayerUnits)
       const newJam   = Math.max(0, state.player.jamActive - 1)
 
-      // Hit = bot fires again; miss = player's turn + round income
-      const newRound = shot.result !== 'hit'
       return {
         ...state,
         round: state.round + 1,
@@ -234,11 +231,11 @@ function reducer(state, action) {
           units: newPlayerUnits,
           skipTurns: state.player.skipTurns + (newGens - prevGens),
           jamActive: newJam,
-          credits: newRound ? capCredits(state.player.credits + ECONOMY.creditPerRound) : state.player.credits,
+          credits: capCredits(state.player.credits + ECONOMY.creditPerRound),
         },
         bot: {
           ...state.bot,
-          credits: capCredits(state.bot.credits + computeCreditChange(shot) + (newRound ? ECONOMY.creditPerRound : 0)),
+          credits: capCredits(state.bot.credits + computeCreditChange(shot) + ECONOMY.creditPerRound),
           shots: newBotShots,
           ...aiUpdate,
         },

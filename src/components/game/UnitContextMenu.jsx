@@ -20,9 +20,9 @@ export default function UnitContextMenu({ unit, credits, abilities, position, on
   const rCost   = repairCost(unit)
   const uCost   = upgradeCost(unit)
   const nl      = nextLevel(unit.level)
+  const hitCount   = Object.values(unit.health).filter(v => v === 'hit').length
   const canRepair  = rCost > 0 && !unit.destroyed && credits >= rCost
   const canUpgrade = nl !== null && uCost < Infinity && credits >= uCost && !unit.destroyed && hitCount === 0
-  const hitCount   = Object.values(unit.health).filter(v => v === 'hit').length
 
   const hasAbility   = ABILITY_UNITS.includes(unit.code)
   const abilityUsed  = hasAbility && abilities?.[unit.code] === true
