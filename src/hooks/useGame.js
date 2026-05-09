@@ -151,7 +151,7 @@ function reducer(state, action) {
         bot: {
           ...state.bot,
           shots: newBotShots,
-          credits: capCredits(state.bot.credits + ECONOMY.creditPerRound),
+          credits: newRound ? capCredits(state.bot.credits + ECONOMY.creditPerRound) : state.bot.credits,
         },
       }
     }
