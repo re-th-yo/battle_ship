@@ -48,10 +48,31 @@ function FlechesSide({ left, right }) {
   )
 }
 
+// Yellow lines — full-page, behind content, proportional to viewport
+function YellowLines() {
+  return (
+    <img
+      src="/assets/yellowlines.svg"
+      alt=""
+      style={{
+        position: 'absolute',
+        inset: 0,
+        width: '100%',
+        height: '100%',
+        objectFit: 'contain',
+        opacity: 0.5,
+        pointerEvents: 'none',
+        userSelect: 'none',
+        zIndex: 1,
+      }}
+    />
+  )
+}
+
 // Logo using Scyborg font
 function Logo() {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
       <div style={{
         fontFamily: "'Scyborg', 'JetBrains Mono', monospace",
         fontSize: 'clamp(32px, 5vw, 72px)',
@@ -64,17 +85,17 @@ function Logo() {
       }}>
         battle.shxp
       </div>
-      <div style={{
-        display: 'flex', justifyContent: 'space-between', alignItems: 'baseline',
+      <p style={{
         fontFamily: "'JetBrains Mono', monospace",
         fontSize: 11,
         color: '#C5FF00',
         opacity: 0.5,
         letterSpacing: '0.04em',
+        margin: 0,
+        whiteSpace: 'nowrap',
       }}>
-        <span>/Reinvented Battleship Game</span>
-        <span>@rethyo_visual</span>
-      </div>
+        /Reinvented Battleship Game________________________________@rethyo_visual
+      </p>
     </div>
   )
 }
@@ -85,13 +106,14 @@ function MenuBtn({ label, onClick, disabled }) {
       onClick={onClick}
       disabled={disabled}
       style={{
-        display: 'block', width: '100%',
+        display: 'block',
         backgroundColor: '#C5FF00',
         border: 'none',
         color: '#0A0A0A',
         fontFamily: "'JetBrains Mono', monospace",
         fontSize: 14, fontWeight: 700, letterSpacing: '0.12em',
         padding: '11px 18px', textAlign: 'left',
+        whiteSpace: 'nowrap',
         cursor: disabled ? 'not-allowed' : 'pointer',
         opacity: disabled ? 0.35 : 1,
         transition: 'background-color 0.08s',
@@ -279,35 +301,22 @@ export default function HomePage() {
       backgroundColor: '#0A0A0A', overflow: 'hidden',
       display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
     }}>
+      <YellowLines />
+
       {/* Blue cross clusters — 4 corners */}
       <CornerCross top={0} left={0} />
       <CornerCross top={0} right={0} />
       <CornerCross bottom={0} left={0} />
       <CornerCross bottom={0} right={0} />
 
-      {/* Main content — inline-flex so width = title width, all children stretch to match */}
+      {/* Main content */}
       <div style={{
         position: 'relative', zIndex: 10,
-        display: 'inline-flex', flexDirection: 'column', alignItems: 'stretch', gap: 40,
+        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 40,
       }}>
-        {/* Yellow lines centered on this block, proportional to it */}
-        <img
-          src="/assets/yellowlines.svg"
-          alt=""
-          style={{
-            position: 'absolute',
-            top: '50%', left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: '320%',
-            pointerEvents: 'none',
-            userSelect: 'none',
-            opacity: 0.5,
-            zIndex: -1,
-          }}
-        />
-
         <Logo />
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+        {/* Button column — fit-content, centered */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
           <MenuBtn label="1/..JOIN"  onClick={() => setShowJoin(true)} />
           <MenuBtn label={creating ? '2/......' : '2/CREATE'} onClick={handleCreate} disabled={creating} />
           <MenuBtn label="3/...BOT"  onClick={() => setShowDiff(true)} />
