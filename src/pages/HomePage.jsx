@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { ROUTES } from '../lib/constants.js'
 import { useGameContext } from '../store/GameContext.jsx'
 import { createRoom, joinRoom } from '../lib/roomService.js'
+import { VERSION } from '../lib/version.js'
 
 // Blue cross clusters at each corner (3×3 grid of the SVG)
 function CornerCross({ top, bottom, left, right }) {
@@ -321,6 +322,16 @@ export default function HomePage() {
             </div>
           )}
         </div>
+      </div>
+
+      {/* Version — bottom right */}
+      <div style={{
+        position: 'absolute', bottom: 14, right: 18,
+        fontFamily: "'JetBrains Mono', monospace",
+        fontSize: 9, color: '#C5FF00', opacity: 0.25, letterSpacing: '0.15em',
+        userSelect: 'none', pointerEvents: 'none',
+      }}>
+        v{VERSION}
       </div>
 
       {showDiff && <DiffModal onSelect={selectDiff} onClose={() => setShowDiff(false)} />}
