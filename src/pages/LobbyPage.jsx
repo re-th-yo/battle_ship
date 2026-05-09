@@ -6,11 +6,7 @@ import { ROUTES } from '../lib/constants.js'
 
 function CodeCell({ char }) {
   return (
-    <div style={{
-      clipPath: 'polygon(5px 0%,100% 0%,100% calc(100% - 5px),calc(100% - 5px) 100%,0% 100%,0% 5px)',
-      backgroundColor: '#C5FF00',
-      padding: 1,
-    }}>
+    <div style={{ border: '1px solid #C5FF00' }}>
       <div style={{
         width: 52, height: 64,
         backgroundColor: '#0A0A0A',
@@ -110,11 +106,7 @@ export default function LobbyPage() {
         </div>
       </div>
 
-      <div style={{
-        clipPath: 'polygon(12px 0%,100% 0%,100% calc(100% - 12px),calc(100% - 12px) 100%,0% 100%,0% 12px)',
-        backgroundColor: 'rgba(197,255,0,0.18)',
-        padding: 1,
-      }}>
+      <div style={{ border: '1px solid rgba(197,255,0,0.18)' }}>
       <div style={{
         display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 36,
         backgroundColor: '#0A0A0A',

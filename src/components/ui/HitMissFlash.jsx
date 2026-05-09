@@ -39,7 +39,6 @@ export default function HitMissFlash({ lastShot, onDone }) {
         style={{
           backgroundColor: pillBg,
           padding: '12px 36px',
-          clipPath: 'polygon(12px 0%,100% 0%,100% calc(100% - 12px),calc(100% - 12px) 100%,0% 100%,0% 12px)',
         }}
       >
         <span style={{

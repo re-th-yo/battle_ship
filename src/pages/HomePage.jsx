@@ -137,11 +137,7 @@ function DiffModal({ onSelect, onClose }) {
     >
       <div
         onClick={e => e.stopPropagation()}
-        style={{
-          clipPath: 'polygon(12px 0%,100% 0%,100% calc(100% - 12px),calc(100% - 12px) 100%,0% 100%,0% 12px)',
-          backgroundColor: '#C5FF00',
-          padding: 1,
-        }}
+        style={{ border: '1px solid #C5FF00' }}
       >
       <div style={{ backgroundColor: '#0D0D0D', padding: '28px 32px', minWidth: 260 }}>
         <div style={{
@@ -203,11 +199,7 @@ function JoinModal({ onClose }) {
     >
       <div
         onClick={e => e.stopPropagation()}
-        style={{
-          clipPath: 'polygon(12px 0%,100% 0%,100% calc(100% - 12px),calc(100% - 12px) 100%,0% 100%,0% 12px)',
-          backgroundColor: '#C5FF00',
-          padding: 1,
-        }}
+        style={{ border: '1px solid #C5FF00' }}
       >
       <div style={{ backgroundColor: '#0D0D0D', padding: '32px 36px', minWidth: 300, display: 'flex', flexDirection: 'column', gap: 18 }}>
         <div style={{

@@ -651,9 +651,7 @@ export default function GamePage() {
         {showQuitMenu && (
           <div style={{
             position: 'absolute', top: 'calc(100% + 8px)', left: 0,
-            clipPath: 'polygon(6px 0%,100% 0%,100% calc(100% - 6px),calc(100% - 6px) 100%,0% 100%,0% 6px)',
-            backgroundColor: 'rgba(197,255,0,0.25)',
-            padding: 1,
+            border: '1px solid rgba(197,255,0,0.25)',
           }}>
             <div style={{ backgroundColor: '#0A0A0A', padding: '6px 0', minWidth: 160 }}>
               <button
@@ -709,7 +707,6 @@ export default function GamePage() {
             fontFamily: "'JetBrains Mono',monospace",
             fontSize: 11, fontWeight: 700, letterSpacing: '0.15em',
             padding: '7px 18px', whiteSpace: 'nowrap', zIndex: 20,
-            clipPath: 'polygon(6px 0%,100% 0%,100% calc(100% - 6px),calc(100% - 6px) 100%,0% 100%,0% 6px)',
           }}>
             {actionBanner}
           </div>
@@ -816,7 +813,6 @@ export default function GamePage() {
                 fontSize: 13, fontWeight: 700,
                 letterSpacing: '0.2em',
                 padding: '10px 26px',
-                clipPath: 'polygon(6px 0%,100% 0%,100% calc(100% - 6px),calc(100% - 6px) 100%,0% 100%,0% 6px)',
               }}>
                 // YOUR TURN
               </div>
@@ -863,7 +859,6 @@ export default function GamePage() {
             fontFamily: "'JetBrains Mono', monospace",
             fontSize: 13, fontWeight: 700, letterSpacing: '0.2em',
             padding: '10px 28px',
-            clipPath: 'polygon(8px 0%,100% 0%,100% calc(100% - 8px),calc(100% - 8px) 100%,0% 100%,0% 8px)',
           }}>
             {mpFirstTurn === 'player' ? '// YOU GO FIRST' : '// OPPONENT GOES FIRST'}
           </div>
@@ -878,7 +873,6 @@ export default function GamePage() {
           fontFamily: "'JetBrains Mono',monospace", fontSize: 9,
           fontWeight: 700, letterSpacing: '0.15em',
           padding: '6px 14px', zIndex: 50, whiteSpace: 'nowrap',
-          clipPath: 'polygon(6px 0%,100% 0%,100% calc(100% - 6px),calc(100% - 6px) 100%,0% 100%,0% 6px)',
         }}>
           // {shotError}
         </div>

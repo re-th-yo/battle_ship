@@ -51,7 +51,6 @@ function DigitBox({ digit, w, h, fontSize }) {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      clipPath: 'polygon(4px 0%,100% 0%,100% calc(100% - 4px),calc(100% - 4px) 100%,0% 100%,0% 4px)',
     }}>
       <span style={{
         fontFamily: "'PPFraktionMono', 'JetBrains Mono', monospace",

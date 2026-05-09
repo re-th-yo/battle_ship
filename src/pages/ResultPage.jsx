@@ -59,7 +59,6 @@ export default function ResultPage() {
         <div style={{
           border: '1px solid #C5FF00',
           padding: '20px 32px',
-          clipPath: 'polygon(10px 0%,100% 0%,100% calc(100% - 10px),calc(100% - 10px) 100%,0% 100%,0% 10px)',
           display: 'grid', gridTemplateColumns:'1fr 1fr', gap:'12px 32px',
         }}>
           {[

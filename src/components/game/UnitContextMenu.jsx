@@ -39,7 +39,6 @@ export default function UnitContextMenu({ unit, credits, abilities, position, on
     minWidth: 200,
     fontFamily: "'JetBrains Mono', monospace",
     fontSize: 11,
-    clipPath: 'polygon(8px 0%,100% 0%,100% calc(100% - 8px),calc(100% - 8px) 100%,0% 100%,0% 8px)',
   }
 
   return (

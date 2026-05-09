@@ -5,7 +5,6 @@ export default function RoundBadge({ round }) {
     <div
       className="absolute top-4 right-4 z-20 flex flex-col items-center bg-lime text-dark font-mono font-bold leading-none select-none"
       style={{
-        clipPath: 'polygon(8px 0%, 100% 0%, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0% 100%, 0% 8px)',
         padding: '4px 10px 6px',
       }}
     >
