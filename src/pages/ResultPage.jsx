@@ -82,7 +82,6 @@ export default function ResultPage() {
             fontFamily: 'JetBrains Mono, monospace',
             fontSize: 13, fontWeight: 700, letterSpacing: '0.12em',
             padding: '12px 28px', border: 'none', cursor: 'pointer',
-            clipPath: 'polygon(8px 0%,100% 0%,100% calc(100% - 8px),calc(100% - 8px) 100%,0% 100%,0% 8px)',
           }}
           onMouseEnter={e => { e.currentTarget.style.backgroundColor='#fff' }}
           onMouseLeave={e => { e.currentTarget.style.backgroundColor='#C5FF00' }}

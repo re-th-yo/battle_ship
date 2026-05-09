@@ -46,7 +46,6 @@ function FireBar({ targetName, canFire, waiting, onFire }) {
             width: 42, height: 50,
             backgroundColor: ready ? '#C5FF00' : 'rgba(197,255,0,0.1)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            clipPath: 'polygon(4px 0%,100% 0%,100% calc(100% - 4px),calc(100% - 4px) 100%,0% 100%,0% 4px)',
             transition: 'background-color 0.15s',
           }}>
             <span style={{
@@ -62,7 +61,6 @@ function FireBar({ targetName, canFire, waiting, onFire }) {
       {/* FIRE button */}
       {ready ? (
         <span style={{
-          clipPath: 'polygon(6px 0%,100% 0%,100% calc(100% - 6px),calc(100% - 6px) 100%,0% 100%,0% 6px)',
           backgroundColor: '#C5FF00',
           padding: 2, display: 'inline-block',
         }}>
@@ -128,7 +126,6 @@ function AbilityBtn({ label, active, used, disabled, onClick }) {
         padding: '5px 12px',
         textDecoration: used ? 'line-through' : 'none',
         transition: 'background-color 0.1s',
-        clipPath: (!used && !disabled) ? 'polygon(4px 0%,100% 0%,100% calc(100% - 4px),calc(100% - 4px) 100%,0% 100%,0% 4px)' : undefined,
       }}
     >
       {label}

@@ -32,7 +32,6 @@ function UnitCard({ unit, selected, onClick }) {
         textAlign: 'left',
         color: unit.code === 'shld' ? '#000' : 'white',
         fontFamily: "'JetBrains Mono', monospace",
-        clipPath: placed ? 'none' : 'polygon(4px 0%,100% 0%,100% calc(100% - 4px),calc(100% - 4px) 100%,0% 100%,0% 4px)',
         transition: 'opacity 0.1s, transform 0.05s',
         transform: selected ? 'scale(1.04)' : 'scale(1)',
       }}
@@ -270,7 +269,6 @@ export default function PreGamePage() {
               : '> select a unit'}
           </div>
           <span style={{
-            clipPath: 'polygon(4px 0%,100% 0%,100% calc(100% - 4px),calc(100% - 4px) 100%,0% 100%,0% 4px)',
             backgroundColor: 'rgba(197,255,0,0.3)',
             padding: 1, display: 'block',
           }}>
@@ -294,7 +292,6 @@ export default function PreGamePage() {
           </button>
           </span>
           <span style={{
-            clipPath: 'polygon(5px 0%,100% 0%,100% calc(100% - 5px),calc(100% - 5px) 100%,0% 100%,0% 5px)',
             backgroundColor: allPlaced && !waiting ? '#C5FF00' : 'rgba(197,255,0,0.3)',
             padding: 1, display: 'block', marginTop: 6,
           }}>

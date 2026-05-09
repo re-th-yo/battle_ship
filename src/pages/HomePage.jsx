@@ -111,7 +111,6 @@ function MenuBtn({ label, onClick, disabled }) {
         padding: '11px 18px', textAlign: 'left',
         cursor: disabled ? 'not-allowed' : 'pointer',
         opacity: disabled ? 0.35 : 1,
-        clipPath: 'polygon(6px 0%,100% 0%,100% calc(100% - 6px),calc(100% - 6px) 100%,0% 100%,0% 6px)',
         transition: 'background-color 0.08s',
       }}
       onMouseEnter={e => { if (!disabled) e.currentTarget.style.backgroundColor = '#fff' }}
