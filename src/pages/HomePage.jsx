@@ -59,6 +59,7 @@ function YellowLines() {
         top: '50%', left: '50%',
         transform: 'translate(-50%, -50%)',
         width: 900, height: 900,
+        minWidth: 900, minHeight: 900,
         opacity: 0.5,
         pointerEvents: 'none',
         userSelect: 'none',
