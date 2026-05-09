@@ -75,7 +75,7 @@ function Logo() {
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
       <div style={{
         fontFamily: "'Scyborg', 'JetBrains Mono', monospace",
-        fontSize: 'clamp(32px, 5vw, 72px)',
+        fontSize: 72,
         fontWeight: 400,
         color: '#C5FF00',
         letterSpacing: '0.04em',
