@@ -102,7 +102,7 @@ export const UNIT_DEFINITIONS = {
 
 // Économie
 export const ECONOMY = {
-  creditPerHit:       5,   // hit normal
+  creditPerHit:       10,  // hit normal
   creditLastHit:      10,  // hit qui détruit l'unité
   creditDestroyBonus: 10,  // bonus supplémentaire sur la destruction
   creditPerRound:     2,   // revenu passif par round
