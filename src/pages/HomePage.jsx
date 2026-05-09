@@ -5,22 +5,22 @@ import { useGameContext } from '../store/GameContext.jsx'
 import { createRoom, joinRoom } from '../lib/roomService.js'
 import { VERSION } from '../lib/version.js'
 
-// Blue cross clusters at each corner (3×3 grid of the SVG)
+// Single blue cross per corner, larger, lighter blue
 function CornerCross({ top, bottom, left, right }) {
-  const style = { position: 'absolute', top, bottom, left, right }
   return (
-    <div style={{
-      ...style,
-      display: 'grid',
-      gridTemplateColumns: 'repeat(3, 80px)',
-      gridTemplateRows: 'repeat(3, 80px)',
-      opacity: 0.45,
-      pointerEvents: 'none',
-    }}>
-      {Array.from({ length: 9 }).map((_, i) => (
-        <img key={i} src="/assets/croixbleue.svg" alt="" style={{ width: 80, height: 80 }} />
-      ))}
-    </div>
+    <img
+      src="/assets/croixbleue.svg"
+      alt=""
+      style={{
+        position: 'absolute',
+        top, bottom, left, right,
+        width: 280, height: 280,
+        opacity: 0.55,
+        filter: 'brightness(3)',
+        pointerEvents: 'none',
+        userSelect: 'none',
+      }}
+    />
   )
 }
 
