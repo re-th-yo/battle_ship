@@ -137,13 +137,22 @@ function reducer(state, action) {
           bot: { ...state.bot, shots: newBotShots },
         }
       }
+      const newRound = shot.result !== 'hit'
       return {
         ...state,
         round: state.round + 1,
         turn: shot.result === 'hit' ? 'waiting' : 'player',
         lastShot,
-        player: { ...state.player, units: newPlayerUnits },
-        bot: { ...state.bot, shots: newBotShots },
+        player: {
+          ...state.player,
+          units: newPlayerUnits,
+          credits: newRound ? capCredits(state.player.credits + ECONOMY.creditPerRound) : state.player.credits,
+        },
+        bot: {
+          ...state.bot,
+          shots: newBotShots,
+          credits: newRound ? capCredits(state.bot.credits + ECONOMY.creditPerRound) : state.bot.credits,
+        },
       }
     }
 

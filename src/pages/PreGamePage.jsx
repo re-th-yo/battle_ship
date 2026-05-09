@@ -271,6 +271,8 @@ export default function PreGamePage() {
           <span style={{
             backgroundColor: 'rgba(197,255,0,0.3)',
             padding: 1, display: 'block',
+            opacity: waiting ? 0.3 : 1,
+            pointerEvents: waiting ? 'none' : 'auto',
           }}>
           <button
             onClick={() => { autoPlace(); setSelectedUnit(null) }}

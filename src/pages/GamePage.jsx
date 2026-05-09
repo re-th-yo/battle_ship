@@ -346,6 +346,10 @@ export default function GamePage() {
     const myJamCol = mpRole === 'host' ? 'host_jam' : 'guest_jam'
 
     function applyRoomState(room) {
+      // Forfeit: checked unconditionally before timestamp gating so reconnects never miss it
+      if (room.host_action?.type === 'forfeit' && mpRole !== 'host') { opponentForfeit(); return }
+      if (room.guest_action?.type === 'forfeit' && mpRole !== 'guest') { opponentForfeit(); return }
+
       const shots = room[opponentShotsKey] || []
       while (appliedShotsRef.current < shots.length) {
         const s = shots[appliedShotsRef.current]
@@ -356,17 +360,11 @@ export default function GamePage() {
       // Show notification when opponent takes an economy action
       if (room.host_action?.ts > lastActionTsRef.current.host) {
         lastActionTsRef.current.host = room.host_action.ts
-        if (mpRole !== 'host') {
-          if (room.host_action.type === 'forfeit') opponentForfeit()
-          else showActionBanner('OPPONENT', room.host_action)
-        }
+        if (mpRole !== 'host') showActionBanner('OPPONENT', room.host_action)
       }
       if (room.guest_action?.ts > lastActionTsRef.current.guest) {
         lastActionTsRef.current.guest = room.guest_action.ts
-        if (mpRole !== 'guest') {
-          if (room.guest_action.type === 'forfeit') opponentForfeit()
-          else showActionBanner('OPPONENT', room.guest_action)
-        }
+        if (mpRole !== 'guest') showActionBanner('OPPONENT', room.guest_action)
       }
     }
 
