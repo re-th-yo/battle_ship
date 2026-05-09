@@ -14,6 +14,8 @@ export default function ResultPage() {
   const botHits      = Object.values(bot.shots).filter(s => s.result === 'hit').length
 
   function handleReplay() {
+    sessionStorage.removeItem('battle_mp_session')
+    sessionStorage.removeItem('battle_mp_state')
     reset()
     navigate(ROUTES.home)
   }

@@ -460,6 +460,8 @@ export default function GamePage() {
 
   useEffect(() => {
     if (phase === 'gameover') {
+      ss.removeItem(MP_SESSION_KEY)
+      ss.removeItem(MP_STATE_KEY)
       const t = setTimeout(() => navigate(ROUTES.result), 2500)
       return () => clearTimeout(t)
     }
@@ -653,6 +655,8 @@ export default function GamePage() {
                   if (isMultiplayer && mpRoom) {
                     try { await submitAction(mpRoom.id, mpRole, { type: 'forfeit', ts: Date.now() }) } catch (_) {}
                   }
+                  ss.removeItem(MP_SESSION_KEY)
+                  ss.removeItem(MP_STATE_KEY)
                   reset()
                   navigate(ROUTES.home)
                 }}
@@ -707,7 +711,9 @@ export default function GamePage() {
         <CrossStrip side="left" />
         <CrossStrip side="right" />
 
-        <div style={{
+        <div
+          onContextMenu={e => { e.preventDefault(); setSelectedCol(null); setSelectedRow(null) }}
+          style={{
           backgroundColor: panelBg,
           border: panelBorder,
           borderRadius: panelRadius,
@@ -886,7 +892,7 @@ export default function GamePage() {
         )}
         {phase === 'gameover' && (
           <button
-            onClick={() => { reset(); navigate(ROUTES.home) }}
+            onClick={() => { ss.removeItem(MP_SESSION_KEY); ss.removeItem(MP_STATE_KEY); reset(); navigate(ROUTES.home) }}
             style={{
               fontFamily: "'JetBrains Mono',monospace", fontSize: 10,
               color: '#C5FF00', background: 'none', border: '1px solid #C5FF00',
