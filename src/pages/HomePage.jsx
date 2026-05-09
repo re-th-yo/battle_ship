@@ -59,7 +59,7 @@ function YellowLines() {
         inset: 0,
         width: '100%',
         height: '100%',
-        objectFit: 'contain',
+        objectFit: 'cover',
         opacity: 0.5,
         pointerEvents: 'none',
         userSelect: 'none',
@@ -75,7 +75,7 @@ function Logo() {
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
       <div style={{
         fontFamily: "'Scyborg', 'JetBrains Mono', monospace",
-        fontSize: 72,
+        fontSize: 11,
         fontWeight: 400,
         color: '#C5FF00',
         letterSpacing: '0.04em',
