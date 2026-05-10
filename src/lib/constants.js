@@ -53,9 +53,9 @@ export const UNIT_DEFINITIONS = {
     color: COLORS.bluePx,
     upgradeable: true,
     levels: {
-      S1: { cells: [[0,0],[1,0],[1,1]], w: 2, h: 2 },
-      S2: { cells: [[0,0],[1,0],[2,0],[2,1]], w: 3, h: 2 },
-      S3: { cells: [[0,0],[2,0],[0,1],[1,1],[2,1]], w: 3, h: 2 },
+      S1: { cells: [[0,0],[1,0],[0,1]], w: 2, h: 2 },
+      S2: { cells: [[0,0],[1,0],[2,0],[0,1]], w: 3, h: 2 },
+      S3: { cells: [[0,0],[1,0],[2,0],[0,1],[1,1],[2,1]], w: 3, h: 2 },
     },
     upgradeCost: { S1toS2: 15, S2toS3: 35 },
   },
