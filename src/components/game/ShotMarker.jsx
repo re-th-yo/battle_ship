@@ -21,10 +21,11 @@ export default function ShotMarker({ col, row, result, cellSize, lightBg = false
       }}
     >
       {isHit ? (
-        <svg width={size * 0.6} height={size * 0.6} viewBox="0 0 20 20">
-          <line x1="2" y1="2" x2="18" y2="18" stroke="#FF00FF" strokeWidth="3.5" strokeLinecap="round" />
-          <line x1="18" y1="2" x2="2" y2="18" stroke="#FF00FF" strokeWidth="3.5" strokeLinecap="round" />
-        </svg>
+        <img
+          src="/assets/dot_eliminated.svg"
+          draggable={false}
+          style={{ width: size, height: size, pointerEvents: 'none' }}
+        />
       ) : (
         // lightBg=true (attack/lime board) → dark dot; lightBg=false (layout/dark) → lime dot
         <div style={{
