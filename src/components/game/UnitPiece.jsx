@@ -6,20 +6,6 @@ const UNIT_IMAGES = {
   trll_S1: '/assets/units/trll_s1.png',
 }
 
-function HitDot({ cellSize }) {
-  return (
-    <img
-      src="/assets/dot_eliminated.svg"
-      draggable={false}
-      style={{
-        position: 'absolute', inset: 0,
-        width: '100%', height: '100%',
-        pointerEvents: 'none',
-      }}
-    />
-  )
-}
-
 export default function UnitPiece({ unit, cellSize, onClick, onContextMenu, faded = false }) {
   const def   = UNIT_DEFINITIONS[unit.code]
   const color = def.color
@@ -75,11 +61,8 @@ export default function UnitPiece({ unit, cellSize, onClick, onContextMenu, fade
                 cursor: onClick ? 'pointer' : (onContextMenu ? 'context-menu' : 'default'),
                 userSelect: 'none',
                 backgroundColor: isHit ? 'rgba(0,0,0,0.45)' : 'transparent',
-                border: isHit ? '2px solid #FF0000' : 'none',
               }}
-            >
-              {isHit && <HitDot cellSize={cellSize} />}
-            </div>
+            />
           )
         })}
       </>
@@ -109,10 +92,9 @@ export default function UnitPiece({ unit, cellSize, onClick, onContextMenu, fade
               cursor: onClick ? 'pointer' : (onContextMenu ? 'context-menu' : 'default'),
               overflow: 'hidden',
               userSelect: 'none',
-              border: isHit ? '2px solid #FF0000' : 'none',
             }}
           >
-            {isFirst && (
+            {isFirst && !isHit && (
               <div style={{
                 position: 'absolute',
                 top: 2, left: 3,
@@ -125,7 +107,6 @@ export default function UnitPiece({ unit, cellSize, onClick, onContextMenu, fade
                 <div style={{ fontSize: 11, fontWeight: 'bold' }}>{unit.level}</div>
               </div>
             )}
-            {isHit && <HitDot cellSize={cellSize} />}
           </div>
         )
       })}
