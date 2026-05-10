@@ -1,6 +1,11 @@
 import { UNIT_DEFINITIONS } from '../../lib/constants.js'
 import { getUnitCells, cellKey } from '../../lib/gameEngine.js'
 
+// PNG assets for specific unit+level combos
+const UNIT_IMAGES = {
+  trll_S1: '/assets/units/trll_s1.png',
+}
+
 export default function UnitPiece({ unit, cellSize, onClick, onContextMenu, faded = false }) {
   const def   = UNIT_DEFINITIONS[unit.code]
   const color = def.color
@@ -11,6 +16,69 @@ export default function UnitPiece({ unit, cellSize, onClick, onContextMenu, fade
   function handleContextMenu(e) {
     e.preventDefault()
     onContextMenu?.(unit, { x: e.clientX, y: e.clientY })
+  }
+
+  const imageSrc = UNIT_IMAGES[`${unit.code}_${unit.level}`]
+
+  if (imageSrc) {
+    const levelDef = def.levels[unit.level]
+    const minCol   = Math.min(...cells.map(c => c.col))
+    const minRow   = Math.min(...cells.map(c => c.row))
+    const opacity  = faded ? 0.3 : (unit.destroyed ? 0.4 : 1)
+    const rot      = (unit.rotation ?? 0) * 90
+
+    return (
+      <>
+        <img
+          src={imageSrc}
+          draggable={false}
+          style={{
+            position: 'absolute',
+            left: minCol * cellSize,
+            top: minRow * cellSize,
+            width: levelDef.w * cellSize,
+            height: levelDef.h * cellSize,
+            opacity,
+            pointerEvents: 'none',
+            userSelect: 'none',
+            transform: rot ? `rotate(${rot}deg)` : undefined,
+            transformOrigin: 'center center',
+          }}
+        />
+        {cells.map(({ col: abCol, row: abRow }, i) => {
+          const isHit = unit.health[cellKey(abCol, abRow)] === 'hit'
+          return (
+            <div
+              key={i}
+              onClick={onClick}
+              onContextMenu={onContextMenu ? handleContextMenu : undefined}
+              style={{
+                position: 'absolute',
+                left: abCol * cellSize,
+                top: abRow * cellSize,
+                width: cellSize,
+                height: cellSize,
+                cursor: onClick ? 'pointer' : (onContextMenu ? 'context-menu' : 'default'),
+                userSelect: 'none',
+                backgroundColor: isHit ? 'rgba(0,0,0,0.45)' : 'transparent',
+                border: isHit ? '2px solid #FF0000' : 'none',
+              }}
+            >
+              {isHit && (
+                <div style={{
+                  position: 'absolute', inset: 0,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  color: '#FF0000', fontSize: cellSize * 0.5, fontWeight: 'bold',
+                  opacity: 0.9, pointerEvents: 'none',
+                }}>
+                  ✕
+                </div>
+              )}
+            </div>
+          )
+        })}
+      </>
+    )
   }
 
   return (
