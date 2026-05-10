@@ -5,6 +5,7 @@ import {
   isDefeated, destroyedGenCount, cellKey,
   getRadarCells, getMissileCells,
   repairCost, applyRepair, upgradeCost, applyUpgrade,
+  getUnitCells,
 } from '../lib/gameEngine.js'
 import { ECONOMY } from '../lib/constants.js'
 
@@ -86,7 +87,7 @@ function reducer(state, action) {
           ...state.player,
           units: {
             ...state.player.units,
-            [action.unitId]: { ...u, rotation: ((u.rotation ?? 0) + 1) % 4 },
+            [action.unitId]: { ...u, rotation: ((u.rotation ?? 0) + 3) % 4 },
           },
         },
       }
@@ -320,6 +321,15 @@ function reducer(state, action) {
       const unit = state.player.units[action.unitId]
       const cost = repairCost(unit)
       if (state.player.credits < cost) return state
+
+      // Cells that were hit — clear them from bot's memory so it must re-target
+      const hitKeys = new Set(
+        Object.entries(unit.health).filter(([, v]) => v === 'hit').map(([k]) => k)
+      )
+      const newBotShots = Object.fromEntries(Object.entries(state.bot.shots).filter(([k]) => !hitKeys.has(k)))
+      const newBotHunts = (state.bot.hunts || []).filter(c => !hitKeys.has(cellKey(c.col, c.row)))
+      const newBotHits  = (state.bot.hits  || []).filter(c => !hitKeys.has(cellKey(c.col, c.row)))
+
       return {
         ...state,
         player: {
@@ -327,6 +337,7 @@ function reducer(state, action) {
           credits: state.player.credits - cost,
           units: { ...state.player.units, [action.unitId]: applyRepair(unit) },
         },
+        bot: { ...state.bot, shots: newBotShots, hunts: newBotHunts, hits: newBotHits },
       }
     }
 
@@ -335,12 +346,34 @@ function reducer(state, action) {
       const unit = state.player.units[action.unitId]
       const cost = upgradeCost(unit)
       if (cost === Infinity || state.player.credits < cost) return state
+
+      const upgradedUnit = applyUpgrade(unit)
+      // New cells added by upgrade — remove any existing bot shots there (were misses, now covered)
+      const oldKeys = new Set(getUnitCells(unit).map(c => cellKey(c.col, c.row)))
+      const newKeys = new Set(getUnitCells(upgradedUnit).filter(c => !oldKeys.has(cellKey(c.col, c.row))).map(c => cellKey(c.col, c.row)))
+      const newBotShots = newKeys.size > 0
+        ? Object.fromEntries(Object.entries(state.bot.shots).filter(([k]) => !newKeys.has(k)))
+        : state.bot.shots
+
       return {
         ...state,
         player: {
           ...state.player,
           credits: state.player.credits - cost,
-          units: { ...state.player.units, [action.unitId]: applyUpgrade(unit) },
+          units: { ...state.player.units, [action.unitId]: upgradedUnit },
+        },
+        bot: newKeys.size > 0 ? { ...state.bot, shots: newBotShots } : state.bot,
+      }
+    }
+
+    // ─── Clear specific shots from player.shots (multiplayer: opponent repaired/upgraded) ──
+    case 'CLEAR_SHOTS': {
+      const keys = new Set(action.keys)
+      return {
+        ...state,
+        player: {
+          ...state.player,
+          shots: Object.fromEntries(Object.entries(state.player.shots).filter(([k]) => !keys.has(k))),
         },
       }
     }
@@ -481,6 +514,7 @@ export function useGame(difficulty = 'easy') {
   const clearLastShot    = useCallback(() => dispatch({ type: 'CLEAR_LAST_SHOT' }), [])
   const clearLastAbility = useCallback(() => dispatch({ type: 'CLEAR_LAST_ABILITY' }), [])
   const buyAbility       = useCallback((abilityKey) => dispatch({ type: 'BUY_ABILITY', abilityKey }), [])
+  const clearShots       = useCallback((keys) => dispatch({ type: 'CLEAR_SHOTS', keys }), [])
   const autoPlace    = useCallback(()  => dispatch({ type: 'AUTOPLACE_UNITS' }), [])
   const restoreState = useCallback((s) => dispatch({ type: 'RESTORE_STATE', state: s }), [])
   const reset        = useCallback(()  => dispatch({ type: 'RESET' }), [])
@@ -504,5 +538,6 @@ export function useGame(difficulty = 'easy') {
     state, placeUnit, pickupUnit, rotateUnit, startGame, startGameMultiplayer, restoreState,
     setUiMode, playerShot, opponentShot, opponentForfeit, botTakeTurn, repairUnit, upgradeUnit,
     useRadar, useGltch, useMsl, clearLastShot, clearLastAbility, buyAbility, autoPlace, reset,
+    clearShots,
   }
 }
