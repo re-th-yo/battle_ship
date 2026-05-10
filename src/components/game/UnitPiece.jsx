@@ -25,7 +25,14 @@ export default function UnitPiece({ unit, cellSize, onClick, onContextMenu, fade
     const minCol   = Math.min(...cells.map(c => c.col))
     const minRow   = Math.min(...cells.map(c => c.row))
     const opacity  = faded ? 0.3 : (unit.destroyed ? 0.4 : 1)
-    const rot      = -(unit.rotation ?? 0) * 90
+    // Each rotation uses rotate(90deg) + optional scaleX(-1) so the 3D render
+    // stays coherent (no upside-down 180° flips, no reversed-lighting 270°).
+    const IMG_TRANSFORM = {
+      0: undefined,
+      1: 'scaleX(-1)',
+      2: 'rotate(90deg) scaleX(-1)',
+      3: 'rotate(90deg)',
+    }
 
     return (
       <>
@@ -41,7 +48,7 @@ export default function UnitPiece({ unit, cellSize, onClick, onContextMenu, fade
             opacity,
             pointerEvents: 'none',
             userSelect: 'none',
-            transform: rot ? `rotate(${rot}deg)` : undefined,
+            transform: IMG_TRANSFORM[unit.rotation ?? 0],
             transformOrigin: 'center center',
           }}
         />
