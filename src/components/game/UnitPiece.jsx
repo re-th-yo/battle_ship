@@ -25,7 +25,7 @@ export default function UnitPiece({ unit, cellSize, onClick, onContextMenu, fade
     const minCol   = Math.min(...cells.map(c => c.col))
     const minRow   = Math.min(...cells.map(c => c.row))
     const opacity  = faded ? 0.3 : (unit.destroyed ? 0.4 : 1)
-    const rot      = (unit.rotation ?? 0) * 90
+    const rot      = -(unit.rotation ?? 0) * 90
 
     return (
       <>
