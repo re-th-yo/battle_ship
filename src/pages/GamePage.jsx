@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, useCallback, useMemo } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useGameContext } from '../store/GameContext.jsx'
 import { submitShot, submitGltch, submitJam, submitAction, subscribeToGame, getRoomById } from '../lib/gameSync.js'
-import { getMissileCells, nextLevel } from '../lib/gameEngine.js'
+import { getMissileCells, nextLevel, getUnitCells, applyUpgrade, cellKey } from '../lib/gameEngine.js'
 import { ROUTES, ROW_LABELS, COL_LABELS, GRID_COLS, GRID_ROWS } from '../lib/constants.js'
 import GameGrid from '../components/game/GameGrid.jsx'
 import HitMissFlash from '../components/ui/HitMissFlash.jsx'
@@ -251,7 +251,7 @@ export default function GamePage() {
   const {
     state, playerShot, opponentShot, opponentForfeit, botTakeTurn, startGameMultiplayer, restoreState,
     setUiMode, reset, repairUnit, upgradeUnit, useRadar, useGltch, useMsl,
-    clearLastShot, clearLastAbility, buyAbility,
+    clearLastShot, clearLastAbility, buyAbility, clearShots,
   } = game
 
   // Multiplayer context — routeState on fresh nav, localStorage on reload
@@ -355,14 +355,20 @@ export default function GamePage() {
         appliedShotsRef.current++
       }
       if (room[myJamCol] > 0) setMpJamTurns(room[myJamCol])
-      // Show notification when opponent takes an economy action
+      // Show notification + apply effects when opponent takes an economy action
       if (room.host_action?.ts > lastActionTsRef.current.host) {
         lastActionTsRef.current.host = room.host_action.ts
-        if (mpRole !== 'host') showActionBanner('OPPONENT', room.host_action)
+        if (mpRole !== 'host') {
+          showActionBanner('OPPONENT', room.host_action)
+          if (room.host_action.cells?.length) clearShots(room.host_action.cells)
+        }
       }
       if (room.guest_action?.ts > lastActionTsRef.current.guest) {
         lastActionTsRef.current.guest = room.guest_action.ts
-        if (mpRole !== 'guest') showActionBanner('OPPONENT', room.guest_action)
+        if (mpRole !== 'guest') {
+          showActionBanner('OPPONENT', room.guest_action)
+          if (room.guest_action.cells?.length) clearShots(room.guest_action.cells)
+        }
       }
     }
 
@@ -380,6 +386,15 @@ export default function GamePage() {
       document.removeEventListener('visibilitychange', handleVisibility)
     }
   }, [])
+
+  // Poll room every 3s when stuck waiting for opponent shot (handles tab-switch disconnects)
+  useEffect(() => {
+    if (!isMultiplayer || phase !== 'playing' || turn !== 'waiting') return
+    const id = setInterval(async () => {
+      try { applyRoomState(await getRoomById(mpRoom.id)) } catch (_) {}
+    }, 3000)
+    return () => clearInterval(id)
+  }, [isMultiplayer, phase, turn])
 
   // Persist game state to localStorage after each action (multiplayer only)
   useEffect(() => {
@@ -480,9 +495,11 @@ export default function GamePage() {
 
   function handleRepair(unitId) {
     const unit = player.units[unitId]
+    // Cell keys that were hit (opponent must re-target after repair)
+    const repairedCells = Object.entries(unit.health).filter(([, v]) => v === 'hit').map(([k]) => k)
     repairUnit(unitId)
     if (isMultiplayer) {
-      const action = { type: 'repair', code: unit.code, ts: Date.now() }
+      const action = { type: 'repair', code: unit.code, cells: repairedCells, ts: Date.now() }
       lastActionTsRef.current[mpRole] = action.ts
       showActionBanner('YOU', action)
       submitAction(mpRoom.id, mpRole, action).catch(() => {})
@@ -492,9 +509,13 @@ export default function GamePage() {
   function handleUpgrade(unitId) {
     const unit = player.units[unitId]
     const nl = nextLevel(unit.level)
+    // New cells added by upgrade (opponent's misses there must be cleared)
+    const oldKeys = new Set(getUnitCells(unit).map(c => cellKey(c.col, c.row)))
+    const upgradedUnit = applyUpgrade(unit)
+    const newCells = getUnitCells(upgradedUnit).filter(c => !oldKeys.has(cellKey(c.col, c.row))).map(c => cellKey(c.col, c.row))
     upgradeUnit(unitId)
     if (isMultiplayer) {
-      const action = { type: 'upgrade', code: unit.code, level: nl, ts: Date.now() }
+      const action = { type: 'upgrade', code: unit.code, level: nl, cells: newCells, ts: Date.now() }
       lastActionTsRef.current[mpRole] = action.ts
       showActionBanner('YOU', action)
       submitAction(mpRoom.id, mpRole, action).catch(() => {})

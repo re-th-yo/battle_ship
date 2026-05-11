@@ -8,20 +8,25 @@ export function parseKey(key) {
   return { col, row }
 }
 
-// Rotate cell offsets 90° clockwise once and re-normalize to (0,0) origin
-function rotateCells90(cells) {
-  const rotated = cells.map(([dc, dr]) => [dr, -dc])
-  const minCol = Math.min(...rotated.map(([dc]) => dc))
-  const minRow = Math.min(...rotated.map(([, dr]) => dr))
-  return rotated.map(([dc, dr]) => [dc - minCol, dr - minRow])
-}
-
-// Rotate cell offsets by (rotation % 4) × 90° clockwise
+// Rotate cell offsets by (rotation % 4) × 90° clockwise.
+// Anchor cycles through corners: R0=TL, R1=TR, R2=BR, R3=BL.
+// The anchor offset stays at [0,0] so the piece pivots around the same grid cell.
 export function rotateCells(cells, rotation = 0) {
-  let result = cells
   const n = ((rotation % 4) + 4) % 4
-  for (let i = 0; i < n; i++) result = rotateCells90(result)
-  return result
+  let result = cells.slice()
+  for (let i = 0; i < n; i++) result = result.map(([dc, dr]) => [dr, -dc])
+
+  const cs = result.map(([dc]) => dc)
+  const rs = result.map(([, dr]) => dr)
+  const minC = Math.min(...cs), maxC = Math.max(...cs)
+  const minR = Math.min(...rs), maxR = Math.max(...rs)
+
+  const [sc, sr] = n === 0 ? [minC, minR]
+                 : n === 1 ? [maxC, minR]
+                 : n === 2 ? [maxC, maxR]
+                 :           [minC, maxR]
+
+  return result.map(([dc, dr]) => [dc - sc, dr - sr])
 }
 
 // Absolute positions of all cells of a placed unit, respecting rotation
